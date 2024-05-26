@@ -7,6 +7,13 @@
     <title>Brain Scanner</title>
 </head>
 <body>
-    <h1>Hello, World!</h1>
+    <h1>Brain Scanner</h1>
+    <form action="{{ url_for('upload_image') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="image" accept="image/*" required>
+    </form>
+    {% if filename %}
+        <h2>Uploaded Image:</h2>
+        <img src="{{ url_for('uploaded_file', filename=filename) }}" alt="Uploaded Image">
+    {% endif %}
 </body>
 </html>
