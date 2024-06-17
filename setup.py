@@ -4,7 +4,9 @@ from setuptools import setup, find_packages
 
 REQUIRED = [
     'torch',
-    'flask'
+    'flask',
+    'shap',
+    'numpy'
 ]
 
 with open('README.md', 'r') as f:
