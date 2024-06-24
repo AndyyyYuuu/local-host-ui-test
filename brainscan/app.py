@@ -14,7 +14,7 @@ app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app)
 
-statistics = {}
+statistics = {"graph":{}, "bar":{}, "number":{}}
 
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
@@ -36,14 +36,24 @@ def index():
     return render_template("index.html")
 
 
-def graph_value(title, value: float):
+def update_bar(title, value: float):
     if type(value) in (int, float):
-        if title in statistics.keys():
-            statistics[title].append(value)
-        else:
-            statistics[title] = [value]
+        statistics["bar"][title] = value
 
-        socketio.emit('new_value', {'title': title, 'value': value})
+        socketio.emit('new_bar_value', {'title': title, 'value': value})
+
+    else:
+        raise TypeError("Input parameter `value` must be of type int or float.")
+
+
+def update_graph(title, value: float):
+    if type(value) in (int, float):
+        if title in statistics["graph"].keys():
+            statistics["graph"][title].append(value)
+        else:
+            statistics["graph"][title] = [value]
+
+        socketio.emit('new_graph_value', {'title': title, 'value': value})
 
     else:
         raise TypeError("Input parameter `value` must be of type int or float.")

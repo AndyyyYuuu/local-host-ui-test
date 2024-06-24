@@ -4,42 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Model Explainer</title>
+    <title>Loss Grapher</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.min.js"></script>
+
 </head>
 <body>
     <h1>Loss Grapher</h1>
     <div id="graphs-board">
         <div id="graph"></div>
     </div>
-
-    <script>
-        const socket = io();
-
-        let values = {};
-
-        socket.on('new_value', function(data) {
-
-            if (data.title in values){
-                values[data.title].push(data.value);
-            }else{
-                values[data.title] = [data.value];
-            }
-            updateGraph();
-        });
-
-        function updateGraph() {
-            console.log(values);
-            const trace = {
-                x: Array.from({length: values.loss.length}, (_, i) => i + 1),
-                y: values.loss,
-                type: 'scatter'
-            };
-
-            Plotly.newPlot('graph', [trace]);
-        }
-    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>
 </html>

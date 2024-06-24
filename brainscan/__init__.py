@@ -1,2 +1,2 @@
-from .app import init, graph_value
+from .app import *
 

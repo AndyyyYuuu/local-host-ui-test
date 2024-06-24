@@ -25,8 +25,6 @@ model = MLP(3, 4, 1)
 brainscan.init()
 
 while True:
+
+    brainscan.update_graph("loss", random.randint(0, 100))
     time.sleep(2)
-    print("*")
-
-    brainscan.graph_value("loss", random.randint(0, 100))
-
