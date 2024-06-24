@@ -1,7 +1,8 @@
 import brainscan
 import torch
 from torch import nn
-import shap
+import random
+import time
 
 class MLP(nn.Module):
 
@@ -21,5 +22,11 @@ class MLP(nn.Module):
 
 
 model = MLP(3, 4, 1)
-print(model)
-brainscan.init(model, torch.Size([3]))
+brainscan.init()
+
+while True:
+    time.sleep(2)
+    print("*")
+
+    brainscan.graph_value("loss", random.randint(0, 100))
+
