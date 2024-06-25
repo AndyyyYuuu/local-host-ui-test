@@ -1,14 +1,12 @@
 import os
 import numpy as np
-import shap
 import torch
-import matplotlib
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_socketio import SocketIO, emit
 #from werkzeug.utils import secure_filename
 import threading
-from multiprocessing import Process, freeze_support
 from flask_cors import CORS
+import urllib.parse
 
 app = Flask(__name__)
 CORS(app)
@@ -47,6 +45,7 @@ def update_bar(title, value: float):
 
 
 def update_graph(title, value: float):
+    title = urllib.parse.quote(title)
     if type(value) in (int, float):
         if title in statistics["graph"].keys():
             statistics["graph"][title].append(value)
