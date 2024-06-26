@@ -1,0 +1,38 @@
+
+@font-face{
+    font-family: "Roboto";
+    src: url("fonts/Roboto/Roboto-Regular.ttf");
+}
+@font-face{
+    font-family: "Roboto";
+    src: url("fonts/Roboto/Roboto-Bold.ttf");
+    font-weight: bold;
+}
+@font-face{
+    font-family: "Roboto";
+    src: url("fonts/Roboto/Roboto-Italic.ttf");
+    font-style: italic;
+}
+@font-face{
+    font-family: "Roboto";
+    src: url("fonts/Roboto/Roboto-BoldItalic.ttf");
+    font-weight: bold;
+    font-style: italic;
+}
+
+body{
+    background: #f9f9f9;
+    font-family: Roboto;
+}
+
+.graph-box{
+    display: inline-block;
+    width: 25rem;
+    height: 15rem;
+    border-color: #bcbcbc;
+    border-style: solid;
+    border-radius: 5px;
+    margin: 1rem;
+    padding: 1rem;
+    background: white;
+}
