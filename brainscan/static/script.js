@@ -23,9 +23,10 @@ function updateGraph(title) {
         console.log(title)
         var newElement = document.createElement('div');
         newElement.id = 'graph-box-'+title;
+        newElement.classList.add('graph-box');
         newElement.innerHTML = "<h2>"+decodeURIComponent(title)+"</h2> <div id='graph-"+title+"'></div>";
         graphsContainer.appendChild(newElement);
     }
 
-    Plotly.newPlot('graph-'+title, [trace]);
+    Plotly.newPlot('graph-'+title, [trace], {}, {"displayModeBar": false});
 }
