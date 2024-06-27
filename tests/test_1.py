@@ -1,4 +1,4 @@
-import brainscan
+import trainreaction
 import torch
 from torch import nn
 import random
@@ -23,10 +23,10 @@ class MLP(nn.Module):
 
 
 model = MLP(3, 4, 1)
-brainscan.init()
+trainreaction.init()
 
 while True:
 
-    brainscan.update_graph("Train Loss", random.uniform(0, 1))
-    brainscan.update_graph("Valid Loss", random.uniform(0, 1))
+    trainreaction.update_graph("Train Loss", random.uniform(0, 1))
+    trainreaction.update_graph("Valid Loss", random.uniform(0, 1))
     time.sleep(2)

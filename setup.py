@@ -13,9 +13,9 @@ with open('README.md', 'r') as f:
     LONG_DESCRIPTION = f.read()
 
 setup(
-    name='brainscan',
+    name='trainreaction',
     version='0.1.0',
-    description='Library for explaining and visualizing neural networks with a local web-based UI.',
+    description='Web UI for graphing train loss and consulting chatbot.',
     long_description=LONG_DESCRIPTION,
     long_description_content_type='text/markdown',
     author='Andy S. Yu',
