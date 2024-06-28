@@ -20,19 +20,41 @@
     font-style: italic;
 }
 
+
+
 body{
     background: #f9f9f9;
     font-family: Roboto;
 }
 
+
+
 .graph-box{
     display: inline-block;
     width: 25rem;
     height: 15rem;
-    border-color: #bcbcbc;
+    border-color: #ccc;
     border-style: solid;
     border-radius: 5px;
     margin: 1rem;
     padding: 1rem;
     background: white;
+}
+
+.graph-title{
+    font-size: 16px;
+}
+
+
+.line-chart {
+    width: 24rem;
+    height: 13rem;
+    margin: 0.5rem;
+    border: 1px solid #ccc;
+}
+
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 2;
 }
