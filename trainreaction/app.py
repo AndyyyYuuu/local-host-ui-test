@@ -37,29 +37,35 @@ def index():
     return render_template("index.html")
 
 
-def update_bar(title: str, value: float):
-    title = urllib.parse.quote(title)
-    if type(value) in (int, float):
-        statistics["bar"][title] = value
+class bar:
 
-        socketio.emit('new_bar_value', {'title': title, 'value': value})
+    @staticmethod
+    def update(title: str, value: float):
+        title = urllib.parse.quote(title)
+        if type(value) in (int, float):
+            statistics["bar"][title] = value
 
-    else:
-        raise TypeError("input parameter `value` must be of type int or float.")
+            socketio.emit('new_bar_value', {'title': title, 'value': value})
 
-
-def update_graph(title: str, value: float):
-    title = urllib.parse.quote(title)
-    if type(value) in (int, float):
-        if title in statistics["graph"].keys():
-            statistics["graph"][title].append(value)
         else:
-            statistics["graph"][title] = [value]
+            raise TypeError("input parameter `value` must be of type int or float.")
 
-        socketio.emit('new_graph_value', {'title': title, 'value': value})
 
-    else:
-        raise TypeError("input parameter `value` must be of type int or float.")
+class line:
+
+    @staticmethod
+    def update(title: str, value: float):
+        title = urllib.parse.quote(title)
+        if type(value) in (int, float):
+            if title in statistics["graph"].keys():
+                statistics["graph"][title].append(value)
+            else:
+                statistics["graph"][title] = [value]
+
+            socketio.emit('new_graph_value', {'title': title, 'value': value})
+
+        else:
+            raise TypeError("input parameter `value` must be of type int or float.")
 
 
 def run_flask():

@@ -27,6 +27,7 @@ trainreaction.init()
 
 while True:
 
-    trainreaction.update_graph("Train Loss", random.uniform(0, 1))
-    trainreaction.update_graph("Valid Loss", random.uniform(0, 1))
+    trainreaction.line.update("Train Loss", random.uniform(0, 1))
+    trainreaction.line.update("Valid Loss", random.uniform(0, 1))
+    trainreaction.bar.update("Progress", random.uniform(0, 100))
     time.sleep(2)

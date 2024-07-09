@@ -41,16 +41,34 @@ body{
     background: white;
 }
 
+.bar-box{
+    display: inline-block;
+    width: 25rem;
+    height: 5rem;
+    border-color: #ccc;
+    border-style: solid;
+    border-radius: 5px;
+    margin: 1rem;
+    padding: 1rem;
+    background: white;
+}
+
 .graph-title{
     font-size: 16px;
 }
 
 
-.line-chart {
+.graph-svg {
     width: 24rem;
     height: 13rem;
     margin: 0.5rem;
     border: 1px solid #ccc;
+}
+
+.bar-svg {
+    width: 24rem;
+    height: 4rem;
+    margin: 0.5rem;
 }
 
 .line {

@@ -12,7 +12,43 @@ socket.on('new_graph_value', function(data) {
     updateGraph(data.title);
 });
 
-function updateGraph(title) {
+socket.on('new_bar_value', function(data) {
+    updateBar(data);
+});
+
+function updateBar(data){
+
+    const barsContainer = document.getElementById('bars-board')
+    if (!barsContainer.querySelector("[id=\"bar-box-"+data.title+"\"]")){
+        var newElement = document.createElement('div');
+        newElement.id = 'bar-box-'+data.title;
+        newElement.classList.add('bar-box');
+        newElement.innerHTML = `<div class='bar-title'>${decodeURIComponent(data.title)}</div> <div id='bar-${data.title}'></div>`;
+        barsContainer.appendChild(newElement);
+    }
+    var containerId = `bar-${data.title}`;
+    var container = document.getElementById(containerId);
+    const backRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    backRect.setAttribute("x", "0");
+    backRect.setAttribute("y", "0");
+    backRect.setAttribute("width", "100");
+    backRect.setAttribute("height", "10");
+    backRect.setAttribute("fill", "#000000");
+
+    const progRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    progRect.setAttribute("x", "0");
+    progRect.setAttribute("y", "0");
+    progRect.setAttribute("width", data.value);
+    progRect.setAttribute("height", "10");
+    progRect.setAttribute("fill", "#ff0000");
+
+    container.innerHTML = `<svg width="25rem" height="8rem" id="${containerId+'-svg'}" class="bar-svg"></svg>`
+    document.getElementById(containerId+'-svg').appendChild(backRect)
+    document.getElementById(containerId+'-svg').appendChild(progRect)
+}
+
+
+function updateGraph(title){
     const trace = {
         x: Array.from({length: values[title].length}, (_, i) => i + 1),
         y: values[title],
@@ -56,6 +92,6 @@ function buildLineChart(containerId, xData, yData){
     const linePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     linePath.setAttribute('class', 'line');
     linePath.setAttribute('d', lineGenerator(xData, yData));
-    container.innerHTML = `<svg width="25rem" height="15rem" id="${containerId+'-svg'}" class="line-chart"></svg>`
+    container.innerHTML = `<svg width="25rem" height="15rem" id="${containerId+'-svg'}" class="graph-svg"></svg>`
     document.getElementById(containerId+'-svg').appendChild(linePath)
 }
