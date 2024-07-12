@@ -29,5 +29,5 @@ while True:
 
     trainreaction.line.update("Train Loss", random.uniform(0, 1))
     trainreaction.line.update("Valid Loss", random.uniform(0, 1))
-    trainreaction.bar.update("Progress", random.uniform(0, 100))
+    trainreaction.bar.update("Progress", random.uniform(0, 1))
     time.sleep(2)

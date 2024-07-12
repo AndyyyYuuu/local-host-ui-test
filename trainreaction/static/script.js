@@ -17,34 +17,31 @@ socket.on('new_bar_value', function(data) {
 });
 
 function updateBar(data){
-
+    data.value = Math.max(Math.min(data.value, 1), 0);
     const barsContainer = document.getElementById('bars-board')
     if (!barsContainer.querySelector("[id=\"bar-box-"+data.title+"\"]")){
         var newElement = document.createElement('div');
         newElement.id = 'bar-box-'+data.title;
         newElement.classList.add('bar-box');
+        newElement.classList.add('stat-box');
         newElement.innerHTML = `<div class='bar-title'>${decodeURIComponent(data.title)}</div> <div id='bar-${data.title}'></div>`;
         barsContainer.appendChild(newElement);
+
+
+        var container = document.getElementById(`bar-${data.title}`);
+        var backRect = document.createElement("div");
+        backRect.setAttribute('class', 'bar-background-rect');
+        backRect.setAttribute("id", `bar-background-rect-${data.title}`)
+
+        var progRect = document.createElement("div");
+        progRect.setAttribute("id", `bar-progress-rect-${data.title}`)
+        progRect.setAttribute('class', 'bar-progress-rect');
+
+        backRect.appendChild(progRect);
+        container.appendChild(backRect);
     }
-    var containerId = `bar-${data.title}`;
-    var container = document.getElementById(containerId);
-    const backRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    backRect.setAttribute("x", "0");
-    backRect.setAttribute("y", "0");
-    backRect.setAttribute("width", "100");
-    backRect.setAttribute("height", "10");
-    backRect.setAttribute("fill", "#000000");
-
-    const progRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-    progRect.setAttribute("x", "0");
-    progRect.setAttribute("y", "0");
-    progRect.setAttribute("width", data.value);
-    progRect.setAttribute("height", "10");
-    progRect.setAttribute("fill", "#ff0000");
-
-    container.innerHTML = `<svg width="25rem" height="8rem" id="${containerId+'-svg'}" class="bar-svg"></svg>`
-    document.getElementById(containerId+'-svg').appendChild(backRect)
-    document.getElementById(containerId+'-svg').appendChild(progRect)
+    document.getElementById(`bar-progress-rect-${data.title}`).style.width = data.value*386+"px";
+    console.log(document.getElementById(`bar-progress-rect-${data.title}`))
 }
 
 
@@ -60,6 +57,7 @@ function updateGraph(title){
         var newElement = document.createElement('div');
         newElement.id = 'graph-box-'+title;
         newElement.classList.add('graph-box');
+        newElement.classList.add('stat-box');
         newElement.innerHTML = `<div class='graph-title'>${decodeURIComponent(title)}</div> <div id='graph-${title}'></div>`;
         graphsContainer.appendChild(newElement);
     }
