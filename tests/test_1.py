@@ -25,9 +25,14 @@ class MLP(nn.Module):
 model = MLP(3, 4, 1)
 trainreaction.init()
 
+train_loss_graph = trainreaction.Line("Train Loss")
+train_loss_graph.color("black")
+
+progress_bar = trainreaction.Bar("Progress")
+
 while True:
 
-    trainreaction.line.update("Train Loss", random.uniform(0, 1))
-    trainreaction.line.update("Valid Loss", random.uniform(0, 1))
-    trainreaction.bar.update("Progress", random.uniform(0, 1))
+    train_loss_graph.update(random.uniform(0, 1))
+    progress_bar.update(random.uniform(0, 1))
     time.sleep(2)
+

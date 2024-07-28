@@ -12,6 +12,12 @@ socket.on('new_graph_value', function(data) {
     updateGraph(data.title);
 });
 
+socket.on('set_graph_color', function(data) {
+    var graph_line = document.getElementById('graph-${data.title}-svg');
+    graph_line.setAttribute("color", data.value);
+
+});
+
 socket.on('new_bar_value', function(data) {
     updateBar(data);
 });
@@ -43,6 +49,7 @@ function updateBar(data){
     document.getElementById(`bar-progress-rect-${data.title}`).style.width = data.value*386+"px";
     console.log(document.getElementById(`bar-progress-rect-${data.title}`))
 }
+
 
 
 function updateGraph(title){
