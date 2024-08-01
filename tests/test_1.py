@@ -30,9 +30,9 @@ train_loss_graph.color("black")
 
 progress_bar = trainreaction.Bar("Progress")
 
-while True:
-
+for i in range(3):
     train_loss_graph.update(random.uniform(0, 1))
     progress_bar.update(random.uniform(0, 1))
+    train_loss_graph.color("black")
     time.sleep(2)
 

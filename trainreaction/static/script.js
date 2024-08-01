@@ -13,12 +13,14 @@ socket.on('new_graph_value', function(data) {
 });
 
 socket.on('set_graph_color', function(data) {
-    var graph_line = document.getElementById('graph-${data.title}-svg');
-    graph_line.setAttribute("color", data.value);
+    console.log(data);
+    var graph_line = document.getElementById(`graph-${data.title}-svg-line`);
+    graph_line.setAttribute("style", "stroke: "+data.value);
 
 });
 
 socket.on('new_bar_value', function(data) {
+
     updateBar(data);
 });
 
@@ -96,6 +98,7 @@ function buildLineChart(containerId, xData, yData){
     var container = document.getElementById(containerId);
     const linePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     linePath.setAttribute('class', 'line');
+    linePath.setAttribute('id', `${containerId}-svg-line`);
     linePath.setAttribute('d', lineGenerator(xData, yData));
     container.innerHTML = `<svg width="25rem" height="15rem" id="${containerId+'-svg'}" class="graph-svg"></svg>`
     document.getElementById(containerId+'-svg').appendChild(linePath)
