@@ -1,22 +1,25 @@
 const socket = io();
 
-let values = {};
+let graphs = {};
 
 socket.on('new_graph_value', function(data) {
 
-    if (data.title in values){
-        values[data.title].push(data.value);
+    if (data.title in graphs){
+        graphs[data.title].values.push(data.value);
     }else{
-        values[data.title] = [data.value];
+        graphs[data.title] = {values: [data.value], color: "steelblue"};
     }
     updateGraph(data.title);
 });
 
 socket.on('set_graph_color', function(data) {
-    console.log(data);
     var graph_line = document.getElementById(`graph-${data.title}-svg-line`);
     graph_line.setAttribute("style", "stroke: "+data.value);
-
+    if (data.title in graphs){
+        graphs[data.title].color = data.value;
+    }else{
+        graphs[data.title] = {values: [], color: data.value};
+    }
 });
 
 socket.on('new_bar_value', function(data) {
@@ -49,20 +52,18 @@ function updateBar(data){
         container.appendChild(backRect);
     }
     document.getElementById(`bar-progress-rect-${data.title}`).style.width = data.value*386+"px";
-    console.log(document.getElementById(`bar-progress-rect-${data.title}`))
 }
 
 
 
 function updateGraph(title){
     const trace = {
-        x: Array.from({length: values[title].length}, (_, i) => i + 1),
-        y: values[title],
+        x: Array.from({length: graphs[title].values.length}, (_, i) => i + 1),
+        y: graphs[title].values,
         type: 'scatter'
     };
     const graphsContainer = document.getElementById('graphs-board')
     if (!graphsContainer.querySelector("[id=\"graph-box-"+title+"\"]")){
-        console.log(title)
         var newElement = document.createElement('div');
         newElement.id = 'graph-box-'+title;
         newElement.classList.add('graph-box');
@@ -70,11 +71,14 @@ function updateGraph(title){
         newElement.innerHTML = `<div class='graph-title'>${decodeURIComponent(title)}</div> <div id='graph-${title}'></div>`;
         graphsContainer.appendChild(newElement);
     }
-    buildLineChart(`graph-${title}`, Array.from({length: values[title].length}, (_, i) => i + 1), values[title]);
+    buildLineChart(title);
     //Plotly.newPlot('graph-'+title, [trace], {}, {"displayModeBar": false});
 }
 
-function buildLineChart(containerId, xData, yData){
+function buildLineChart(title){
+    const containerId = `graph-${title}`;
+    const xData = Array.from({length: graphs[title].values.length}, (_, i) => i + 1)
+    const yData = graphs[title].values;
     const width = 23*16;
     const height = 13*16;
     const margin = { top: 20, right: 30, bottom: 30, left: 40 };
@@ -100,6 +104,7 @@ function buildLineChart(containerId, xData, yData){
     linePath.setAttribute('class', 'line');
     linePath.setAttribute('id', `${containerId}-svg-line`);
     linePath.setAttribute('d', lineGenerator(xData, yData));
+    linePath.setAttribute("style", "stroke: "+graphs[title].color);
     container.innerHTML = `<svg width="25rem" height="15rem" id="${containerId+'-svg'}" class="graph-svg"></svg>`
     document.getElementById(containerId+'-svg').appendChild(linePath)
 }
