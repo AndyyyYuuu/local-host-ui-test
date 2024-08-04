@@ -56,7 +56,7 @@ class Line:
 
     def __init__(self, title):
         self.title = urllib.parse.quote(title)
-
+        socketio.emit('new_graph', {'title': self.title})
 
     def update(self, value: float):
 
