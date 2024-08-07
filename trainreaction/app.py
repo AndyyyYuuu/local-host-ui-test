@@ -3,11 +3,12 @@ import numpy as np
 import webbrowser
 import torch
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO
 #from werkzeug.utils import secure_filename
 import threading
 from flask_cors import CORS
 import urllib.parse
+import queue
 
 PORT = 8000
 
@@ -37,6 +38,32 @@ def index():
     return render_template("index.html")
 
 
+request_queue = queue.Queue()
+connected_clients = set()
+
+
+
+@socketio.on("connect")
+def handle_connect():
+    connected_clients.add(request.sid)
+    while not request_queue.empty():
+        data = request_queue.get()
+        socketio.emit(*data)
+
+
+@socketio.on("disconnect")
+def handle_disconnect():
+    connected_clients.remove(request.sid)
+
+
+def emit(name, data):
+    if connected_clients:
+        socketio.emit(name, data)
+    else:
+        request_queue.put((name, data))
+
+
+
 class Bar:
 
     def __init__(self, title):
@@ -46,7 +73,7 @@ class Bar:
         if type(value) in (int, float):
             statistics["bar"][self.title] = value
 
-            socketio.emit('new_bar_value', {'title': self.title, 'value': value})
+            emit('new_bar_value', {'title': self.title, 'value': value})
 
         else:
             raise TypeError("input parameter `value` must be of type int or float.")
@@ -56,7 +83,7 @@ class Line:
 
     def __init__(self, title):
         self.title = urllib.parse.quote(title)
-        socketio.emit('new_graph', {'title': self.title})
+        emit('new_graph', {'title': self.title})
 
     def update(self, value: float):
 
@@ -66,7 +93,7 @@ class Line:
             else:
                 statistics["graph"][self.title] = [value]
 
-            socketio.emit('new_graph_value', {'title': self.title, 'value': value})
+            emit('new_graph_value', {'title': self.title, 'value': value})
 
         else:
             raise TypeError("input parameter `value` must be of type int or float.")
@@ -74,7 +101,7 @@ class Line:
 
     def color(self, value: str):
         if type(value) is str:
-            socketio.emit('set_graph_color', {'title': self.title, 'value': value})
+            emit('set_graph_color', {'title': self.title, 'value': value})
 
 
 

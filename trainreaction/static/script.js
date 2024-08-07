@@ -4,6 +4,7 @@ let graphs = {};
 
 socket.on('new_graph', function(data) {
     graphs[data.title] = {values: [], color: "steelblue"};
+    updateGraph(data.title)
 });
 
 socket.on('new_graph_value', function(data) {
@@ -12,9 +13,9 @@ socket.on('new_graph_value', function(data) {
 });
 
 socket.on('set_graph_color', function(data) {
+    graphs[data.title].color = data.value;
     var graph_line = document.getElementById(`graph-${data.title}-svg-line`);
     graph_line.setAttribute("style", "stroke: "+data.value);
-    graphs[data.title].color = data.value;
 });
 
 socket.on('new_bar_value', function(data) {
