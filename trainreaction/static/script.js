@@ -14,8 +14,10 @@ socket.on('new_graph_value', function(data) {
 
 socket.on('set_graph_color', function(data) {
     graphs[data.title].color = data.value;
-    var graph_line = document.getElementById(`graph-${data.title}-svg-line`);
-    graph_line.setAttribute("style", "stroke: "+data.value);
+    if (graphs[title].values.length < 2){
+        var graph_line = document.getElementById(`graph-${data.title}-svg-line`);
+        graph_line.setAttribute("style", "stroke: "+data.value);
+    }
 });
 
 socket.on('new_bar_value', function(data) {
@@ -86,6 +88,8 @@ function buildLineChart(title){
 
     const xScale = d => margin.left + (d - xMin) * (width - margin.left - margin.right) / (xMax - xMin);
     const yScale = d => height - margin.bottom - (d - yMin) * (height - margin.top - margin.bottom) / (yMax - yMin);
+
+    if (graphs[title].values.length < 2) return;
 
     const lineGenerator = (xData, yData) => {
         return xData.map((d, i) => {
