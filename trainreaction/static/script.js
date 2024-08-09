@@ -14,7 +14,7 @@ socket.on('new_graph_value', function(data) {
 
 socket.on('set_graph_color', function(data) {
     graphs[data.title].color = data.value;
-    if (graphs[title].values.length < 2){
+    if (graphs[data.title].values.length >= 2){
         var graph_line = document.getElementById(`graph-${data.title}-svg-line`);
         graph_line.setAttribute("style", "stroke: "+data.value);
     }
