@@ -30,6 +30,7 @@ train_loss_graph = trainreaction.Line("Train Loss")
 train_loss_graph.color("green")
 
 progress_bar = trainreaction.Bar("Progress")
+progress_bar.color("blue")
 
 for i in range(10):
     train_loss_graph.update(math.sin(i)+1)

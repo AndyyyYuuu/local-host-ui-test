@@ -68,6 +68,7 @@ class Bar:
 
     def __init__(self, title):
         self.title = urllib.parse.quote(title)
+        emit('new_bar', {'title': self.title})
 
     def update(self, value: float):
         if type(value) in (int, float):
@@ -77,6 +78,10 @@ class Bar:
 
         else:
             raise TypeError("input parameter `value` must be of type int or float.")
+
+    def color(self, value: str):
+        if type(value) is str:
+            emit('set_bar_color', {'title': self.title, 'value': value})
 
 
 class Line:

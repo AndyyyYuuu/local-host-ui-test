@@ -1,10 +1,17 @@
 const socket = io();
 
 let graphs = {};
+let bars = {};
 
 socket.on('new_graph', function(data) {
     graphs[data.title] = {values: [], color: "steelblue"};
     updateGraph(data.title)
+});
+
+socket.on('new_bar', function(data) {
+    bars[data.title] = {value: 0, color: "steelblue"};
+    console.log(bars[data.title])
+    updateBar(data.title)
 });
 
 socket.on('new_graph_value', function(data) {
@@ -21,35 +28,45 @@ socket.on('set_graph_color', function(data) {
 });
 
 socket.on('new_bar_value', function(data) {
-
-    updateBar(data);
+    bars[data.title].value = data.value;
+    updateBar(data.title);
 });
 
-function updateBar(data){
+
+socket.on('set_bar_color', function(data) {
+    bars[data.title].color = data.value;
+    var bar_fill = document.getElementById(`bar-progress-rect-${data.title}`);
+    bar_fill.setAttribute("style", "background: "+data.value);
+
+});
+
+function updateBar(title){
+    data = bars[title];
     data.value = Math.max(Math.min(data.value, 1), 0);
     const barsContainer = document.getElementById('bars-board')
-    if (!barsContainer.querySelector("[id=\"bar-box-"+data.title+"\"]")){
+    if (!barsContainer.querySelector("[id=\"bar-box-"+title+"\"]")){
         var newElement = document.createElement('div');
-        newElement.id = 'bar-box-'+data.title;
+        newElement.id = 'bar-box-'+title;
         newElement.classList.add('bar-box');
         newElement.classList.add('stat-box');
-        newElement.innerHTML = `<div class='bar-title'>${decodeURIComponent(data.title)}</div> <div id='bar-${data.title}'></div>`;
+        newElement.innerHTML = `<div class='bar-title'>${decodeURIComponent(title)}</div> <div id='bar-${title}'></div>`;
         barsContainer.appendChild(newElement);
 
 
-        var container = document.getElementById(`bar-${data.title}`);
+        var container = document.getElementById(`bar-${title}`);
         var backRect = document.createElement("div");
         backRect.setAttribute('class', 'bar-background-rect');
-        backRect.setAttribute("id", `bar-background-rect-${data.title}`)
+        backRect.setAttribute("id", `bar-background-rect-${title}`)
 
         var progRect = document.createElement("div");
-        progRect.setAttribute("id", `bar-progress-rect-${data.title}`)
+        progRect.setAttribute("id", `bar-progress-rect-${title}`)
         progRect.setAttribute('class', 'bar-progress-rect');
+        progRect.setAttribute("style", "background: "+data.color);
 
         backRect.appendChild(progRect);
         container.appendChild(backRect);
     }
-    document.getElementById(`bar-progress-rect-${data.title}`).style.width = data.value*386+"px";
+    document.getElementById(`bar-progress-rect-${title}`).style.width = data.value*386+"px";
 }
 
 
