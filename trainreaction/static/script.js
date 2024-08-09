@@ -49,9 +49,8 @@ function updateBar(title){
         newElement.id = 'bar-box-'+title;
         newElement.classList.add('bar-box');
         newElement.classList.add('stat-box');
-        newElement.innerHTML = `<div class='bar-title'>${decodeURIComponent(title)}</div> <div id='bar-${title}'></div>`;
+        newElement.innerHTML = `<span class='bar-title'>${decodeURIComponent(title)}</span> <span class='bar-number' id='bar-${title}-number'></span> <div id='bar-${title}'></div>`;
         barsContainer.appendChild(newElement);
-
 
         var container = document.getElementById(`bar-${title}`);
         var backRect = document.createElement("div");
@@ -66,7 +65,9 @@ function updateBar(title){
         backRect.appendChild(progRect);
         container.appendChild(backRect);
     }
-    document.getElementById(`bar-progress-rect-${title}`).style.width = data.value*386+"px";
+    document.getElementById(`bar-progress-rect-${title}`).style.width = data.value*386 + "px";
+    document.getElementById(`bar-${title}-number`).innerHTML = (data.value*100).toFixed(2) + "%";
+
 }
 
 

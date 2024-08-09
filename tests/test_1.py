@@ -29,11 +29,19 @@ trainreaction.init()
 train_loss_graph = trainreaction.Line("Train Loss")
 train_loss_graph.color("green")
 
-progress_bar = trainreaction.Bar("Progress")
-progress_bar.color("blue")
+valid_loss_graph = trainreaction.Line("Valid Loss")
+valid_loss_graph.color("green")
+
+progress_bar_1 = trainreaction.Bar("Progress 1")
+progress_bar_1.color("blue")
+
+progress_bar_2 = trainreaction.Bar("Progress 2")
+progress_bar_2.color("yellow")
 
 for i in range(10):
-    train_loss_graph.update(math.sin(i)+1)
-    progress_bar.update(i/9)
+    train_loss_graph.update(math.sin(i) + 1)
+    valid_loss_graph.update(math.cos(i) + 1)
+    progress_bar_1.update(i / 9)
+    progress_bar_2.update(i / 10)
     time.sleep(2)
 

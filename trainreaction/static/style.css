@@ -87,3 +87,7 @@ body{
     border-radius: 3px;
     position: relative;
 }
+
+.bar-number {
+    float: right;
+}
