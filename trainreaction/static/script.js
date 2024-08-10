@@ -10,7 +10,6 @@ socket.on('new_graph', function(data) {
 
 socket.on('new_bar', function(data) {
     bars[data.title] = {value: 0, color: "steelblue"};
-    console.log(bars[data.title])
     updateBar(data.title)
 });
 
@@ -128,19 +127,25 @@ function buildLineChart(title){
         linePath.setAttribute("style", "stroke: "+graphs[title].color);
 
         svg.appendChild(linePath)
-    }
 
-    if (graphs[title].values.length >= 1) {
         for (var i=0; i<graphs[title].values.length; i++){
-            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-            circle.setAttribute('cx', xScale(i+1));
-            circle.setAttribute('cy', yScale(graphs[title].values[i]));
-            circle.setAttribute('r', 3);
-            circle.setAttribute('fill', 'white');
-            circle.setAttribute('stroke', graphs[title].color);
-            circle.setAttribute('stroke-width', 1);
-            svg.appendChild(circle);
+            svg.appendChild(svgCircle(xScale(i+1), yScale(graphs[title].values[i]), graphs[title].color));
         }
     }
 
+    if (graphs[title].values.length == 1) {
+        let bounding = svg.getBoundingClientRect();
+        svg.appendChild(svgCircle(bounding.width/2, bounding.height/2, graphs[title].color));
+    }
+}
+
+function svgCircle(x, y, color){
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', x);
+    circle.setAttribute('cy', y);
+    circle.setAttribute('r', 3);
+    circle.setAttribute('fill', 'white');
+    circle.setAttribute('stroke', color);
+    circle.setAttribute('stroke-width', 1);
+    return circle;
 }
