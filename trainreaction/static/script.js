@@ -97,18 +97,61 @@ function buildLineChart(title){
     const width = 23*16;
     const height = 13*16;
     const margin = { top: 20, right: 30, bottom: 30, left: 40 };
+    const padding = { top: 10, right: 10, bottom: 30, left: 30 };
 
     const xMin = 1;//Math.min(...xData);
     const xMax = Math.max(...xData);
     const yMin = 0;//Math.min(...yData);
-    const yMax = Math.max(...yData);
+    var yMax = Math.max(...yData);
 
-    const xScale = d => margin.left + (d - xMin) * (width - margin.left - margin.right) / (xMax - xMin);
-    const yScale = d => height - margin.bottom - (d - yMin) * (height - margin.top - margin.bottom) / (yMax - yMin);
+    const yMarks = tickMarks(yMax);
+    yMax = yMarks[yMarks.length-1];
+
+    const xScale = d => padding.left + (d - xMin) * (width - padding.left - padding.right) / (xMax - xMin);
+    const yScale = d => height - padding.bottom - (d - yMin) * (height - padding.top - padding.bottom) / (yMax - yMin);
 
     var container = document.getElementById(containerId);
     container.innerHTML = `<svg width="25rem" height="15rem" id="${containerId+'-svg'}" class="graph-svg"></svg>`
     const svg = document.getElementById(containerId+'-svg');
+    const bounding = svg.getBoundingClientRect();
+
+    const yAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    yAxisLine.setAttribute("x1", padding.left);
+    yAxisLine.setAttribute("y1", padding.top);
+    yAxisLine.setAttribute("x2", padding.left);
+    yAxisLine.setAttribute("y2", bounding.height-padding.bottom);
+    yAxisLine.setAttribute("stroke", "#999");
+    svg.appendChild(yAxisLine);
+
+    for (let i=0; i<yMarks.length; i++){
+        const markNum = yMarks[i];
+        const mark = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        mark.setAttribute("y1", yScale(markNum));
+        mark.setAttribute("y2", yScale(markNum));
+        mark.setAttribute("x1", padding.left-3);
+        mark.setAttribute("x2", padding.left);
+        mark.setAttribute("stroke", "#999");
+        svg.appendChild(mark);
+    }
+
+    const xAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    xAxisLine.setAttribute("x1", padding.left);
+    xAxisLine.setAttribute("y1", bounding.height-padding.bottom);
+    xAxisLine.setAttribute("x2", bounding.width-padding.right);
+    xAxisLine.setAttribute("y2", bounding.height-padding.bottom);
+    xAxisLine.setAttribute("stroke", "#999");
+    svg.appendChild(xAxisLine);
+
+    for (let i=0; i<=xData.length; i++){
+        const markNum = i;
+        const mark = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        mark.setAttribute("x1", xScale(markNum));
+        mark.setAttribute("x2", xScale(markNum));
+        mark.setAttribute("y1", bounding.height-padding.bottom+3);
+        mark.setAttribute("y2", bounding.height-padding.bottom);
+        mark.setAttribute("stroke", "#999");
+        svg.appendChild(mark);
+    }
 
     if (graphs[title].values.length >= 2) {
 
@@ -134,7 +177,6 @@ function buildLineChart(title){
     }
 
     if (graphs[title].values.length == 1) {
-        let bounding = svg.getBoundingClientRect();
         svg.appendChild(svgCircle(bounding.width/2, bounding.height/2, graphs[title].color));
     }
 }
@@ -148,4 +190,20 @@ function svgCircle(x, y, color){
     circle.setAttribute('stroke', color);
     circle.setAttribute('stroke-width', 1);
     return circle;
+}
+
+function sigFigCeil(num, sigFigs){
+    if (num == 0) return 0;
+    const sign = num > 0 ? 1 : -1;
+    let factor = Math.pow(10, sigFigs-Math.ceil(Math.log10(Math.abs(num))));
+    return sign * Math.ceil(num * factor) / factor;
+}
+
+function tickMarks(max){
+    const unit = sigFigCeil(max/10, 2);
+    var marks = []
+    for (let i=0; i<max+unit; i+=unit){
+        marks.push(i);
+    }
+    return marks;
 }
