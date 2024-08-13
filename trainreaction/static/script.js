@@ -132,6 +132,18 @@ function buildLineChart(title){
         mark.setAttribute("x2", padding.left);
         mark.setAttribute("stroke", "#999");
         svg.appendChild(mark);
+
+        const displayNum = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        displayNum.textContent = markNum;
+        displayNum.setAttribute('y', yScale(markNum));
+        displayNum.setAttribute('x', padding.left-16);
+        displayNum.setAttribute('font-family', "Arial");
+        displayNum.setAttribute('font-size', 12);
+        displayNum.setAttribute('text-align', 'center');
+        displayNum.setAttribute('fill', 'black');
+        svg.appendChild(displayNum);
+        displayNum.setAttribute('y', yScale(markNum)+displayNum.getBBox().height/2);
+        displayNum.setAttribute('x', padding.left-displayNum.getBBox().width-12);
     }
 
     const xAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
@@ -151,6 +163,17 @@ function buildLineChart(title){
         mark.setAttribute("y2", bounding.height-padding.bottom);
         mark.setAttribute("stroke", "#999");
         svg.appendChild(mark);
+
+        const displayNum = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        displayNum.textContent = markNum;
+        displayNum.setAttribute('x', xScale(markNum));
+        displayNum.setAttribute('y', bounding.height-padding.bottom+16);
+        displayNum.setAttribute('font-family', "Arial");
+        displayNum.setAttribute('font-size', 12);
+        displayNum.setAttribute('text-align', 'center');
+        displayNum.setAttribute('fill', 'black');
+        svg.appendChild(displayNum);
+        displayNum.setAttribute('x', xScale(markNum)-displayNum.getBBox().width/2);
     }
 
     if (graphs[title].values.length >= 2) {
