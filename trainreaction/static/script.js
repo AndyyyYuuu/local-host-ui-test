@@ -134,7 +134,7 @@ function buildLineChart(title){
         svg.appendChild(mark);
 
         const displayNum = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-        displayNum.textContent = markNum;
+        displayNum.textContent = Math.round(markNum*100)/100;
         displayNum.setAttribute('y', yScale(markNum));
         displayNum.setAttribute('x', padding.left-16);
         displayNum.setAttribute('font-family', "Arial");
@@ -143,7 +143,7 @@ function buildLineChart(title){
         displayNum.setAttribute('fill', 'black');
         svg.appendChild(displayNum);
         displayNum.setAttribute('y', yScale(markNum)+displayNum.getBBox().height/2);
-        displayNum.setAttribute('x', padding.left-displayNum.getBBox().width-12);
+        displayNum.setAttribute('x', padding.left-displayNum.getBBox().width-8);
     }
 
     const xAxisLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
@@ -154,11 +154,15 @@ function buildLineChart(title){
     xAxisLine.setAttribute("stroke", "#999");
     svg.appendChild(xAxisLine);
 
-    for (let i=0; i<=xData.length; i++){
+    for (let i=1; i<=xData.length; i++){
         const markNum = i;
+        let markX = xScale(markNum);
+        if (xData.length == 1){
+            markX = bounding.width/2;
+        }
         const mark = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        mark.setAttribute("x1", xScale(markNum));
-        mark.setAttribute("x2", xScale(markNum));
+        mark.setAttribute("x1", markX);
+        mark.setAttribute("x2", markX);
         mark.setAttribute("y1", bounding.height-padding.bottom+3);
         mark.setAttribute("y2", bounding.height-padding.bottom);
         mark.setAttribute("stroke", "#999");
@@ -166,14 +170,14 @@ function buildLineChart(title){
 
         const displayNum = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         displayNum.textContent = markNum;
-        displayNum.setAttribute('x', xScale(markNum));
+        displayNum.setAttribute('x', markX);
         displayNum.setAttribute('y', bounding.height-padding.bottom+16);
         displayNum.setAttribute('font-family', "Arial");
         displayNum.setAttribute('font-size', 12);
         displayNum.setAttribute('text-align', 'center');
         displayNum.setAttribute('fill', 'black');
         svg.appendChild(displayNum);
-        displayNum.setAttribute('x', xScale(markNum)-displayNum.getBBox().width/2);
+        displayNum.setAttribute('x', markX-displayNum.getBBox().width/2);
     }
 
     if (graphs[title].values.length >= 2) {
