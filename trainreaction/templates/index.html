@@ -12,9 +12,20 @@
 
 </head>
 <body>
-    <h1>Loss Grapher</h1>
-    <div id="bars-board"></div>
-    <div id="graphs-board"></div>
+    <div style="display: flex; height: 100vh;">
+        <div id="left-side" style="flex:1; flex-grow:1;">
+
+            <div id="bars-board"></div>
+            <div id="graphs-board"></div>
+
+        </div>
+
+        <div id="right-side" style="flex:0; min-width: 24rem;">
+                <div id="chat-box">
+                    Chat!
+                </div>
+        </div>
+    </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 
 </body>

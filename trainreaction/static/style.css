@@ -20,14 +20,21 @@
     font-style: italic;
 }
 
-
-
-body{
+body {
     background: #f9f9f9;
     font-family: Roboto;
+    overflow: hidden;
 }
 
-.stat-box{
+#left-side {
+    overflow: scroll;
+}
+
+#right-side {
+    background: #fff;
+}
+
+.stat-box {
     display: inline-block;
     width: 400px;
     border-color: #ccc;
@@ -38,18 +45,17 @@ body{
     background: white;
 }
 
-.graph-box{
-
+.graph-box {
 
     height: 240px;
 }
 
-.bar-box{
+.bar-box {
     height: 50px;
 
 }
 
-.graph-title{
+.graph-title {
     font-size: 16px;
 }
 
