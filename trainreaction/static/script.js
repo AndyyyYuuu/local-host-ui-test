@@ -39,6 +39,10 @@ socket.on('set_bar_color', function(data) {
 
 });
 
+socket.on('lm_message', function(data){
+    sendLmMessage(data.message);
+})
+
 function updateBar(title){
     data = bars[title];
     data.value = Math.max(Math.min(data.value, 1), 0);
@@ -233,4 +237,29 @@ function tickMarks(max){
         marks.push(i);
     }
     return marks;
+}
+
+document.getElementById("chat-input").addEventListener("keydown", function(event) {
+    if (event.key == "Enter") {
+        event.preventDefault();
+        sendUserMessage(this.value);
+        this.value = "";
+    }
+})
+
+function sendLmMessage(string) {
+    const chatBox = document.getElementById("chat-box");
+    const newChatMessage = document.createElement("div");
+    newChatMessage.classList.add("chat-message","chat-message-lm");
+    newChatMessage.textContent = string;
+    chatBox.appendChild(newChatMessage);
+}
+
+
+function sendUserMessage(string) {
+    const chatBox = document.getElementById("chat-box");
+    const newChatMessage = document.createElement("div");
+    newChatMessage.classList.add("chat-message","chat-message-user");
+    newChatMessage.textContent = string;
+    chatBox.appendChild(newChatMessage);
 }

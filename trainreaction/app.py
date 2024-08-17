@@ -109,6 +109,9 @@ class Line:
             emit('set_graph_color', {'title': self.title, 'value': value})
 
 
+def send_lm_message(string):
+    emit('lm_message', {'message': string});
+
 
 def run_flask():
     socketio.run(app, allow_unsafe_werkzeug=True, port=PORT)

@@ -43,5 +43,6 @@ for i in range(10):
     valid_loss_graph.update(math.cos(i) + 1)
     progress_bar_1.update(i / 9)
     progress_bar_2.update(i / 10)
+    trainreaction.send_lm_message("Hello "*i)
     time.sleep(2)
 
