@@ -16,7 +16,7 @@ app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app)
 
-statistics = {"graph":{}, "bar":{}, "number":{}}
+runData = {"graphs":{}, "bars":{}, "chat":{}}
 
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
@@ -42,13 +42,9 @@ request_queue = queue.Queue()
 connected_clients = set()
 
 
-
 @socketio.on("connect")
 def handle_connect():
     connected_clients.add(request.sid)
-    while not request_queue.empty():
-        data = request_queue.get()
-        socketio.emit(*data)
 
 
 @socketio.on("disconnect")
@@ -57,23 +53,24 @@ def handle_disconnect():
 
 
 def emit(name, data):
-    if connected_clients:
-        socketio.emit(name, data)
-    else:
-        request_queue.put((name, data))
+    socketio.emit(name, data)
 
+
+@socketio.on("fill_me_in")
+def full_data_drop():
+    emit("full_data_drop", runData)
 
 
 class Bar:
 
     def __init__(self, title):
         self.title = urllib.parse.quote(title)
+        runData["bars"][self.title] = {'value': 0, 'color': "steelblue"}
         emit('new_bar', {'title': self.title})
 
     def update(self, value: float):
         if type(value) in (int, float):
-            statistics["bar"][self.title] = value
-
+            runData["bars"][self.title]['value'] = value
             emit('new_bar_value', {'title': self.title, 'value': value})
 
         else:
@@ -81,6 +78,7 @@ class Bar:
 
     def color(self, value: str):
         if type(value) is str:
+            runData["bars"][self.title]['color'] = value
             emit('set_bar_color', {'title': self.title, 'value': value})
 
 
@@ -88,16 +86,13 @@ class Line:
 
     def __init__(self, title):
         self.title = urllib.parse.quote(title)
+        runData["graphs"][self.title] = {'values': [], 'color': "steelblue"}
         emit('new_graph', {'title': self.title})
 
     def update(self, value: float):
 
         if type(value) in (int, float):
-            if self.title in statistics["graph"].keys():
-                statistics["graph"][self.title].append(value)
-            else:
-                statistics["graph"][self.title] = [value]
-
+            runData["graphs"][self.title]['values'].append(value)
             emit('new_graph_value', {'title': self.title, 'value': value})
 
         else:
@@ -106,7 +101,9 @@ class Line:
 
     def color(self, value: str):
         if type(value) is str:
+            runData["graphs"][self.title]['color'] = value
             emit('set_graph_color', {'title': self.title, 'value': value})
+
 
 
 def send_lm_message(string):

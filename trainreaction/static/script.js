@@ -1,7 +1,26 @@
 const socket = io();
 
-let graphs = {};
-let bars = {};
+let runData = {graphs: {}, bars: {}};
+let graphs = runData.graphs;
+let bars = runData.bars;
+
+socket.emit("fill_me_in");
+
+socket.on('full_data_drop', function(data) {
+    runData = data;
+    graphs = runData.graphs;
+    bars = runData.bars;
+    console.log(runData);
+    const graphNames = Object.keys(graphs)
+    for (let i=0; i<graphNames.length; i++){
+        updateGraph(graphNames[i]);
+    }
+
+    const barNames = Object.keys(bars)
+    for (let i=0; i<barNames.length; i++){
+        updateBar(barNames[i]);
+    }
+})
 
 socket.on('new_graph', function(data) {
     graphs[data.title] = {values: [], color: "steelblue"};
@@ -14,7 +33,9 @@ socket.on('new_bar', function(data) {
 });
 
 socket.on('new_graph_value', function(data) {
+    console.log(graphs);
     graphs[data.title].values.push(data.value);
+
     updateGraph(data.title);
 });
 

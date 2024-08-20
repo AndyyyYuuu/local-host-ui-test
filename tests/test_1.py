@@ -38,7 +38,7 @@ progress_bar_1.color("blue")
 progress_bar_2 = trainreaction.Bar("Progress 2")
 progress_bar_2.color("yellow")
 
-for i in range(10):
+for i in range(100):
     train_loss_graph.update(math.sin(i) + 1)
     valid_loss_graph.update(math.cos(i) + 1)
     progress_bar_1.update(i / 9)
