@@ -20,6 +20,14 @@ socket.on('full_data_drop', function(data) {
     for (let i=0; i<barNames.length; i++){
         updateBar(barNames[i]);
     }
+
+    for (let i=0; i<data.chat.length; i++){
+        if (data.chat[i].sender == 0) {
+            addLmMessage(data.chat[i].message);
+        } else {
+            addUserMessage(data.chat[i].message);
+        }
+    }
 })
 
 socket.on('new_graph', function(data) {
@@ -61,7 +69,7 @@ socket.on('set_bar_color', function(data) {
 });
 
 socket.on('lm_message', function(data){
-    sendLmMessage(data.message);
+    addLmMessage(data.message);
 })
 
 function updateBar(title){
@@ -263,12 +271,13 @@ function tickMarks(max){
 document.getElementById("chat-input").addEventListener("keydown", function(event) {
     if (event.key == "Enter") {
         event.preventDefault();
-        sendUserMessage(this.value);
+        addUserMessage(this.value);
+        socket.emit("user_message", {message: this.value});
         this.value = "";
     }
 })
 
-function sendLmMessage(string) {
+function addLmMessage(string) {
     const chatBox = document.getElementById("chat-box");
     const newChatMessage = document.createElement("div");
     newChatMessage.classList.add("chat-message","chat-message-lm");
@@ -277,7 +286,7 @@ function sendLmMessage(string) {
 }
 
 
-function sendUserMessage(string) {
+function addUserMessage(string) {
     const chatBox = document.getElementById("chat-box");
     const newChatMessage = document.createElement("div");
     newChatMessage.classList.add("chat-message","chat-message-user");

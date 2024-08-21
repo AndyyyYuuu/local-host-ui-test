@@ -16,7 +16,7 @@ app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app)
 
-runData = {"graphs":{}, "bars":{}, "chat":{}}
+runData = {"graphs": {}, "bars": {}, "chat": []}
 
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 app.config['ALLOWED_EXTENSIONS'] = {'png', 'jpg', 'jpeg', 'gif'}
@@ -107,7 +107,21 @@ class Line:
 
 
 def send_lm_message(string):
-    emit('lm_message', {'message': string});
+    runData["chat"].append({'message': string, 'sender': 0})
+    emit('lm_message', {'message': string})
+
+
+@socketio.on("user_message")
+def receive_user_message(data):
+    runData["chat"].append({'message': data["message"], 'sender': 1})
+    response = lm(data["message"])
+    send_lm_message(response)
+
+
+
+def lm(string):
+    response = string[::-1]
+    return response
 
 
 def run_flask():
