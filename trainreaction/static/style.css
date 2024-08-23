@@ -123,7 +123,13 @@ body {
     background: #eee;
     height: 4rem;
     margin-bottom: 10px;
+    resize: none;
 
+}
+
+textarea:active, textarea:focus {
+    outline: 0px !important;
+    -webkit-appearance: none;
 }
 
 .chat-message {

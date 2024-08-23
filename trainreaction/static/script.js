@@ -4,6 +4,8 @@ let runData = {graphs: {}, bars: {}};
 let graphs = runData.graphs;
 let bars = runData.bars;
 
+let lmThinking = false;
+
 socket.emit("fill_me_in");
 
 socket.on('full_data_drop', function(data) {
@@ -70,6 +72,8 @@ socket.on('set_bar_color', function(data) {
 
 socket.on('lm_message', function(data){
     addLmMessage(data.message);
+    lmThinking = false;
+    document.getElementById("chat-input").disabled = false;
 })
 
 function updateBar(title){
@@ -272,6 +276,8 @@ document.getElementById("chat-input").addEventListener("keydown", function(event
     if (event.key == "Enter") {
         event.preventDefault();
         addUserMessage(this.value);
+        lmThinking = true;
+        document.getElementById("chat-input").disabled = true;
         socket.emit("user_message", {message: this.value});
         this.value = "";
     }

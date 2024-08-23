@@ -9,6 +9,7 @@ import threading
 from flask_cors import CORS
 import urllib.parse
 import queue
+import time
 
 PORT = 8000
 
@@ -121,6 +122,7 @@ def receive_user_message(data):
 
 def lm(string):
     response = string[::-1]
+    time.sleep(5)
     return response
 
 
