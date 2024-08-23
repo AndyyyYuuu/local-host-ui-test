@@ -12,7 +12,6 @@ socket.on('full_data_drop', function(data) {
     runData = data;
     graphs = runData.graphs;
     bars = runData.bars;
-    console.log(runData);
     const graphNames = Object.keys(graphs)
     for (let i=0; i<graphNames.length; i++){
         updateGraph(graphNames[i]);
@@ -43,7 +42,6 @@ socket.on('new_bar', function(data) {
 });
 
 socket.on('new_graph_value', function(data) {
-    console.log(graphs);
     graphs[data.title].values.push(data.value);
 
     updateGraph(data.title);
@@ -136,13 +134,15 @@ function buildLineChart(title){
     const margin = { top: 20, right: 30, bottom: 30, left: 40 };
     const padding = { top: 10, right: 10, bottom: 30, left: 30 };
 
-    const xMin = 1;//Math.min(...xData);
-    const xMax = Math.max(...xData);
+    const xMin = 0;//Math.min(...xData);
+    var xMax = Math.max(...xData);
     const yMin = 0;//Math.min(...yData);
     var yMax = Math.max(...yData);
 
     const yMarks = tickMarks(yMax);
     yMax = yMarks[yMarks.length-1];
+    const xMarks = intTickMarks(xMax);
+    xMax = xMarks[xMarks.length-1];
 
     const xScale = d => padding.left + (d - xMin) * (width - padding.left - padding.right) / (xMax - xMin);
     const yScale = d => height - padding.bottom - (d - yMin) * (height - padding.top - padding.bottom) / (yMax - yMin);
@@ -190,13 +190,18 @@ function buildLineChart(title){
     xAxisLine.setAttribute("y2", bounding.height-padding.bottom);
     xAxisLine.setAttribute("stroke", "#999");
     svg.appendChild(xAxisLine);
-
-    for (let i=1; i<=xData.length; i++){
-        const markNum = i;
+    for (let i=0; i<=xMarks.length; i++){
+        let markNum = xMarks[i];
         let markX = xScale(markNum);
         if (xData.length == 1){
-            markX = bounding.width/2;
+            if (i==1){
+                markX = bounding.width/2;
+                //markNum = xData[0];
+            } /*else {
+                break;
+            }*/
         }
+
         const mark = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         mark.setAttribute("x1", markX);
         mark.setAttribute("x2", markX);
@@ -270,6 +275,36 @@ function tickMarks(max){
         marks.push(i);
     }
     return marks;
+}
+
+function intTickMarks(max){
+
+    const factor = Math.max(1, 10**Math.floor(Math.log10(max)-1));
+
+    function tickSizeScore(max, tickSize) {
+        return Math.abs(5 - max/tickSize);
+    }
+    const s1 = tickSizeScore(max, 1*factor);
+    const s2 = tickSizeScore(max, 2*factor);
+    const s5 = tickSizeScore(max, 5*factor);
+    const s10 = tickSizeScore(max, 10*factor);
+
+    let tickSize = 10;
+    if (s1 <= s2 && s1 <= s5 && s1 <= s10) {
+        tickSize = 1;
+    } else if (s2 <= s5 && s2 <= s10) {
+        tickSize = 2;
+    } else if (s5 <= s10) {
+        tickSize = 5;
+    }
+    tickSize *= factor;
+
+    let ticks = [];
+    for (let i=0; i<max+tickSize; i+=tickSize) {
+        ticks.push(i);
+    }
+    return ticks;
+
 }
 
 document.getElementById("chat-input").addEventListener("keydown", function(event) {
