@@ -6,18 +6,21 @@ let bars = runData.bars;
 
 let lmThinking = false;
 
+
+/* -------- Saving & Loading -------- */
+
 socket.emit("fill_me_in");
 
 socket.on('full_data_drop', function(data) {
     runData = data;
     graphs = runData.graphs;
     bars = runData.bars;
-    const graphNames = Object.keys(graphs)
+    const graphNames = Object.keys(graphs);
     for (let i=0; i<graphNames.length; i++){
         updateGraph(graphNames[i]);
     }
 
-    const barNames = Object.keys(bars)
+    const barNames = Object.keys(bars);
     for (let i=0; i<barNames.length; i++){
         updateBar(barNames[i]);
     }
@@ -31,14 +34,17 @@ socket.on('full_data_drop', function(data) {
     }
 })
 
+
+/* -------- Stats Board Client Events -------- */
+
 socket.on('new_graph', function(data) {
     graphs[data.title] = {values: [], color: "steelblue"};
-    updateGraph(data.title)
+    updateGraph(data.title);
 });
 
 socket.on('new_bar', function(data) {
     bars[data.title] = {value: 0, color: "steelblue"};
-    updateBar(data.title)
+    updateBar(data.title);
 });
 
 socket.on('new_graph_value', function(data) {
@@ -60,7 +66,6 @@ socket.on('new_bar_value', function(data) {
     updateBar(data.title);
 });
 
-
 socket.on('set_bar_color', function(data) {
     bars[data.title].color = data.value;
     var bar_fill = document.getElementById(`bar-progress-rect-${data.title}`);
@@ -68,11 +73,8 @@ socket.on('set_bar_color', function(data) {
 
 });
 
-socket.on('lm_message', function(data){
-    addLmMessage(data.message);
-    lmThinking = false;
-    document.getElementById("chat-input").disabled = false;
-})
+
+/* -------- Progress Bar Visuals -------- */
 
 function updateBar(title){
     data = bars[title];
@@ -105,6 +107,7 @@ function updateBar(title){
 }
 
 
+/* -------- Line Chart Visuals --------*/
 
 function updateGraph(title){
     const trace = {
@@ -112,7 +115,7 @@ function updateGraph(title){
         y: graphs[title].values,
         type: 'scatter'
     };
-    const graphsContainer = document.getElementById('graphs-board')
+    const graphsContainer = document.getElementById('graphs-board');
     if (!graphsContainer.querySelector("[id=\"graph-box-"+title+"\"]")){
         var newElement = document.createElement('div');
         newElement.id = 'graph-box-'+title;
@@ -122,12 +125,11 @@ function updateGraph(title){
         graphsContainer.appendChild(newElement);
     }
     buildLineChart(title);
-    //Plotly.newPlot('graph-'+title, [trace], {}, {"displayModeBar": false});
 }
 
 function buildLineChart(title){
     const containerId = `graph-${title}`;
-    const xData = Array.from({length: graphs[title].values.length}, (_, i) => i + 1)
+    const xData = Array.from({length: graphs[title].values.length}, (_, i) => i + 1);
     const yData = graphs[title].values;
     const width = 23*16;
     const height = 13*16;
@@ -139,7 +141,7 @@ function buildLineChart(title){
     const yMin = 0;//Math.min(...yData);
     var yMax = Math.max(...yData);
 
-    const yMarks = tickMarks(yMax);
+    const yMarks = floatTickMarks(yMax);
     yMax = yMarks[yMarks.length-1];
     const xMarks = intTickMarks(xMax);
     xMax = xMarks[xMarks.length-1];
@@ -148,7 +150,7 @@ function buildLineChart(title){
     const yScale = d => height - padding.bottom - (d - yMin) * (height - padding.top - padding.bottom) / (yMax - yMin);
 
     var container = document.getElementById(containerId);
-    container.innerHTML = `<svg width="25rem" height="15rem" id="${containerId+'-svg'}" class="graph-svg"></svg>`
+    container.innerHTML = `<svg width="25rem" height="15rem" id="${containerId+'-svg'}" class="graph-svg"></svg>`;
     const svg = document.getElementById(containerId+'-svg');
     const bounding = svg.getBoundingClientRect();
 
@@ -196,10 +198,7 @@ function buildLineChart(title){
         if (xData.length == 1){
             if (i==1){
                 markX = bounding.width/2;
-                //markNum = xData[0];
-            } /*else {
-                break;
-            }*/
+            }
         }
 
         const mark = document.createElementNS('http://www.w3.org/2000/svg', 'line');
@@ -238,7 +237,7 @@ function buildLineChart(title){
         linePath.setAttribute('d', lineGenerator(xData, yData));
         linePath.setAttribute("style", "stroke: "+graphs[title].color);
 
-        svg.appendChild(linePath)
+        svg.appendChild(linePath);
 
         for (var i=0; i<graphs[title].values.length; i++){
             svg.appendChild(svgCircle(xScale(i+1), yScale(graphs[title].values[i]), graphs[title].color));
@@ -268,7 +267,7 @@ function sigFigCeil(num, sigFigs){
     return sign * Math.ceil(num * factor) / factor;
 }
 
-function tickMarks(max){
+function floatTickMarks(max){
     const unit = sigFigCeil(max/10, 2);
     var marks = []
     for (let i=0; i<max+unit; i+=unit){
@@ -276,6 +275,7 @@ function tickMarks(max){
     }
     return marks;
 }
+
 
 function intTickMarks(max){
 
@@ -306,6 +306,15 @@ function intTickMarks(max){
     return ticks;
 
 }
+
+
+/* -------- Chat -------- */
+
+socket.on('lm_message', function(data){
+    addLmMessage(data.message);
+    lmThinking = false;
+    document.getElementById("chat-input").disabled = false;
+})
 
 document.getElementById("chat-input").addEventListener("keydown", function(event) {
     if (event.key == "Enter") {
