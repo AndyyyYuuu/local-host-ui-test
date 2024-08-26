@@ -154,3 +154,45 @@ textarea:active, textarea:focus {
     margin-left: 0;
     border-radius: 10px 10px 10px 0;
 }
+
+#feedback-container {
+    display: flex;
+    justify-content: space-between;
+
+}
+
+.feedback-box {
+    padding: 10px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    width: 10rem;
+    height: 16rem;
+}
+
+.feedback-container {
+    margin-bottom: 10px;
+}
+
+.feedback-box h3 {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 5px;
+
+}
+
+.feedback-icon {
+
+    width: 50%;
+    margin: 0 auto;
+}
+
+.lm-feedback-text {
+    font-size: 16px;
+}
+
+.feedback-box:not(:last-child) {
+    border-right: 2px solid #ccc;
+}
+
