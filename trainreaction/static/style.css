@@ -106,7 +106,7 @@ body {
     margin-top: 5px;
     border-color: #ccc;
     border-style: solid;
-    border-radius: 5px;
+    border-radius: 5px 5px 0 0;
     background: #eee;
     margin-bottom: 10px;
     min-height: 8rem;
@@ -116,18 +116,46 @@ body {
     flex-direction: column;
 }
 
-#chat-input {
-    border-color: #ccc;
-    border-style: solid;
-    border-radius: 5px;
-    background: #eee;
-    height: 4rem;
+#chat-input-container {
+    border-radius: 1.25rem;
+    background: #ddd;
+    min-height: 2.5rem;
     margin-bottom: 10px;
-    resize: none;
-
 }
 
-textarea:active, textarea:focus {
+#chat-input {
+    //border-color: #aaa;
+    border-style: none;
+    font-size: 1rem;
+    font-family: sans-serif;
+    resize: none;
+    padding: 4px;
+    margin-left: 10px;
+    width: auto;
+    /*
+    display: flex;
+    align-items: center;
+    vertical-align: middle;
+    justify-content: center;
+    vertical-align: middle;*/
+}
+
+#chat-input-button {
+    border: none;
+    background: #666;
+    height: 30px;
+    width: 30px;
+    border-radius: 15px;
+    margin-right: 7.5px;
+    margin-left: auto;
+    align-self: top
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+textarea:active, textarea:focus, div:active, div:focus{
     outline: 0px !important;
     -webkit-appearance: none;
 }

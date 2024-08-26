@@ -6,6 +6,11 @@ let bars = runData.bars;
 
 let lmThinking = false;
 
+var pressedKeys = {};
+
+window.onkeyup = function(e) {pressedKeys[e.code] = false;};
+window.onkeydown = function(e) {pressedKeys[e.code] = true;};
+
 
 /* -------- Saving & Loading -------- */
 
@@ -317,15 +322,26 @@ socket.on('lm_message', function(data){
 })
 
 document.getElementById("chat-input").addEventListener("keydown", function(event) {
-    if (event.key == "Enter") {
+    if (event.key == "Enter") { // && !pressedKeys["ShiftLeft"]
         event.preventDefault();
-        addUserMessage(this.value);
-        lmThinking = true;
-        document.getElementById("chat-input").disabled = true;
-        socket.emit("user_message", {message: this.value});
-        this.value = "";
+        sendMessage();
     }
 })
+
+function clickSend(){
+    sendMessage();
+}
+
+function sendMessage() {
+    const string = document.getElementById("chat-input").textContent;
+    if (string.trim() != ""){
+        addUserMessage(string.trim());
+        lmThinking = true;
+        document.getElementById("chat-input").disabled = true;
+        socket.emit("user_message", {message: string.trim()});
+        document.getElementById("chat-input").textContent = "";
+    }
+}
 
 function addLmMessage(string) {
     const chatBox = document.getElementById("chat-box");

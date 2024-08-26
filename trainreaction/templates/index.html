@@ -50,7 +50,16 @@
             </div>
             Chat here!
             <div id="chat-box"></div>
-            <textarea id="chat-input"></textarea>
+            <div id="chat-input-container" style="display: flex; align-items: center">
+                <!--vertical-align: middle-->
+
+                <div id="chat-input" style="display: flex; align-items: center" contenteditable="true"></div>
+                <button id="chat-input-button" onclick="clickSend()">
+                    <svg xmlns="http://www.w3.org/2000/svg" height="20px" viewBox="0 -960 960 960" width="20px" fill="#fff" margin="auto">
+                        <path d="M440-160v-487L216-423l-56-57 320-320 320 320-56 57-224-224v487h-80Z"/>
+                    </svg>
+                </button>
+            </div>
 
         </div>
     </div>
