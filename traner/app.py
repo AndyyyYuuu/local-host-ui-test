@@ -1,5 +1,4 @@
 import os
-import numpy as np
 import webbrowser
 import torch
 from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
@@ -13,7 +12,7 @@ import time
 
 PORT = 8000
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='./templates')
 CORS(app)
 socketio = SocketIO(app)
 

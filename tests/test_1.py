@@ -1,4 +1,4 @@
-import trainreaction
+import traner
 import torch
 from torch import nn
 import random
@@ -24,18 +24,18 @@ class MLP(nn.Module):
 
 
 model = MLP(3, 4, 1)
-trainreaction.init()
+traner.init()
 
-train_loss_graph = trainreaction.Line("Train Loss")
+train_loss_graph = traner.Line("Train Loss")
 train_loss_graph.color("green")
 
-valid_loss_graph = trainreaction.Line("Valid Loss")
+valid_loss_graph = traner.Line("Valid Loss")
 valid_loss_graph.color("green")
 
-progress_bar_1 = trainreaction.Bar("Progress 1")
+progress_bar_1 = traner.Bar("Progress 1")
 progress_bar_1.color("blue")
 
-progress_bar_2 = trainreaction.Bar("Progress 2")
+progress_bar_2 = traner.Bar("Progress 2")
 progress_bar_2.color("yellow")
 
 for i in range(100):

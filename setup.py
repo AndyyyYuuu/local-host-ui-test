@@ -5,15 +5,15 @@ from setuptools import setup, find_packages
 REQUIRED = [
     'torch',
     'flask',
-    'shap',
-    'numpy'
+    'flask_socketio',
+    'flask_cors'
 ]
 
 with open('README.md', 'r') as f:
     LONG_DESCRIPTION = f.read()
 
 setup(
-    name='trainreaction',
+    name='traner',
     version='0.1.0',
     description='Web UI for graphing train loss and consulting chatbot.',
     long_description=LONG_DESCRIPTION,
