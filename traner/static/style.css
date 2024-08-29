@@ -121,10 +121,10 @@ body {
     background: #ddd;
     min-height: 2.5rem;
     margin-bottom: 10px;
+    flex-direction: row;
 }
 
 #chat-input {
-    //border-color: #aaa;
     border-style: none;
     font-size: 1rem;
     font-family: sans-serif;
@@ -132,13 +132,11 @@ body {
     padding: 4px;
     margin-left: 10px;
     width: auto;
-    /*
-    display: flex;
-    align-items: center;
-    vertical-align: middle;
-    justify-content: center;
-    vertical-align: middle;*/
+    flex: 1;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
+
 
 #chat-input-button {
     border: none;
@@ -223,4 +221,5 @@ textarea:active, textarea:focus, div:active, div:focus{
 .feedback-box:not(:last-child) {
     border-right: 2px solid #ccc;
 }
+
 
