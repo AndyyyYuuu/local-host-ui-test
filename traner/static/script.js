@@ -359,3 +359,31 @@ function addUserMessage(string) {
     newChatMessage.textContent = string;
     chatBox.appendChild(newChatMessage);
 }
+
+/* -------- Insights -------- */
+
+socket.on('new_insights', function(data) {
+    if (data.hasOwnProperty("obs")){
+        document.getElementById("lm-obs").textContent = data["obs"];
+        document.getElementById("obs-loader").remove();
+    }
+
+    if (data.hasOwnProperty("exp")){
+        document.getElementById("lm-exp").textContent = data["exp"];
+        document.getElementById("exp-loader").remove();
+    }
+
+    if (data.hasOwnProperty("sug")){
+        document.getElementById("lm-sug").textContent = data["sug"];
+        document.getElementById("sug-loader").remove();
+    }
+})
+
+
+function clearInsights(){
+    document.getElementById("insight-obs").innerHTML += "<div class='loader' id='obs-loader'></div>";
+    document.getElementById("insight-exp").innerHTML += "<div class='loader' id='exp-loader'></div>";
+    document.getElementById("insight-sug").innerHTML += "<div class='loader' id='sug-loader'></div>";
+}
+
+clearInsights();

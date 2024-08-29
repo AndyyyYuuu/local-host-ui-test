@@ -20,6 +20,21 @@
     font-style: italic;
 }
 
+.loader {
+    margin-top: 32px;
+    border: 4px solid #ddd;
+    border-top: 4px solid #666;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 body {
     background: #eee;
     font-family: Roboto;
@@ -181,44 +196,48 @@ textarea:active, textarea:focus, div:active, div:focus{
     border-radius: 10px 10px 10px 0;
 }
 
-#feedback-container {
+#insights-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
 
 }
 
-.feedback-box {
+.insight-box {
     padding: 10px;
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
+    /*
     width: 10rem;
+    max-width: 10rem;*/
     height: 16rem;
 }
 
-.feedback-container {
+.insights-container {
     margin-bottom: 10px;
 }
 
-.feedback-box h3 {
+.insight-box h3 {
     text-align: center;
     margin-top: 0;
     margin-bottom: 5px;
-
 }
 
-.feedback-icon {
+.insight-icon {
 
     width: 50%;
     margin: 0 auto;
 }
 
-.lm-feedback-text {
+.lm-insight-text {
     font-size: 16px;
+    overflow-y: auto;
+    overflow-wrap: break-word;
+    width: 9rem;
 }
 
-.feedback-box:not(:last-child) {
+.insight-box:not(:last-child) {
     border-right: 2px solid #ccc;
 }
 

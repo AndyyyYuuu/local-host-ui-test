@@ -94,6 +94,7 @@ class Line:
         if type(value) in (int, float):
             runData["graphs"][self.title]['values'].append(value)
             emit('new_graph_value', {'title': self.title, 'value': value})
+            emit('new_insights', {'obs': f"Value: {value}"})
 
         else:
             raise TypeError("input parameter `value` must be of type int or float.")
