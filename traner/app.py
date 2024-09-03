@@ -9,10 +9,11 @@ from flask_cors import CORS
 import urllib.parse
 import queue
 import time
+import llm_api
 
 PORT = 8000
 
-app = Flask(__name__, template_folder='./templates')
+app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app)
 
@@ -121,8 +122,8 @@ def receive_user_message(data):
 
 
 def lm(string):
-    response = string[::-1]
-    time.sleep(5)
+    llm_api.set_data(runData)
+    response = llm_api.answer(string)
     return response
 
 

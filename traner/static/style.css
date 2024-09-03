@@ -161,7 +161,7 @@ body {
     border-radius: 15px;
     margin-right: 7.5px;
     margin-left: auto;
-    align-self: top
+    align-self: top;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -170,6 +170,7 @@ body {
 
 textarea:active, textarea:focus, div:active, div:focus{
     outline: 0px !important;
+    appearance: none;
     -webkit-appearance: none;
 }
 
